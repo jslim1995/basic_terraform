@@ -8,7 +8,7 @@ resource "aws_instance" "ec2" {
     subnet_id = "subnet-0e3124a38d1724f4c"
     security_groups = [ "sg-03af6a452c389eb45" ]
     key_name = "jinsu"
-    tagtags = {
+    tags = {
         Name = "Terraform_Test"
     }
     root_block_device {
