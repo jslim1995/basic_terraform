@@ -7,6 +7,11 @@ resource "aws_instance" "ec2" {
     instance_type = "t2.micro"
     subnet_id = "subnet-0e3124a38d1724f4c"
     security_groups = [ "sg-03af6a452c389eb45" ]
+    key_name = "jinsu"
+    root_block_device {
+        volume_type = "gp3"
+        volume_size = "10GiB"
+    }
 }
 
 output "ec2_ip" {
