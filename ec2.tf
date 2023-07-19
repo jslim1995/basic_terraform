@@ -16,8 +16,8 @@ resource "aws_instance" "ec2" {
         volume_size = "10"
     }
     user_data = <<EOF
-      #!/bin/bash
-      sudo echo test | tee test.txt
+#!/bin/bash
+sudo echo test | tee test.txt
 EOF
 }
 
