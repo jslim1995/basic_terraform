@@ -33,5 +33,5 @@ EOF
 }
 
 output "ec2_ip" {
-    value = aws_instance.ec2.private_ip
+    value = aws_instance.ec2[count.index].private_ip
 }
