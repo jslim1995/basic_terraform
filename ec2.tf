@@ -19,7 +19,7 @@ resource "aws_instance" "ec2" {
     security_groups = [ "sg-03af6a452c389eb45" ]
     key_name = "jinsu"
     tags = {
-        Name = "${var.prefix}Terraform-Test-${count.index}"
+        Name = "${var.prefix}-Terraform-Test-${count.index}"
     }
     root_block_device {
         volume_type = "gp3"
