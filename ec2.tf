@@ -33,6 +33,6 @@ EOF
 }
 
 output "ec2_ip" {
-    value = aws_instance.*.private_ip
+    value = "${aws_instance.*.private_ip}"
     description = "PrivateIP address details"
 }
