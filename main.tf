@@ -15,8 +15,10 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "sb" {
+    count = length(var.subnet_az_list)
     vpc_id = aws_vpc.main.id
-    for_each = toset(var.subnet_az_list)
+    availability_zone = var.subnet_az_list[count.index-1].availability_zone
+    cidr_block = var.subnet_az_list[count.index-1].cidr_block
 
     tags = {
         Name = "${var.prefix}-subnet-public1-${var.subnet_az_list.*.availability_zone}"
