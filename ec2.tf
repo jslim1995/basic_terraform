@@ -4,7 +4,6 @@ variable "ec2-count" {
 }
 
 data "template_file" "user_data" {
-    count = var.ec2-count
     template = "${file("shell_script.tpl")}"
 
     vars = {
