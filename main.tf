@@ -19,7 +19,7 @@ resource "aws_subnet" "sb" {
     for_each = toset(var.subnet_az_list)
 
     tags = {
-        Name = "${var.prefix}-subnet-public1-${availability_zone}"
+        Name = "${var.prefix}-subnet-public1-${var.subnet_az_list.*.availability_zone}"
     }
 }
 
