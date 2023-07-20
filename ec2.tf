@@ -3,13 +3,14 @@ variable "ec2-count" {
     description = "value"
 }
 
-# data "template_file" "user_data" {
-#     template = "${file("shell_script.tpl")}"
+data "template_file" "user_data" {
+    count = var.ec2-count
+    template = "${file("shell_script.tpl")}"
 
-#     vars = {
-#         dir_name = "${aws_instance.ec2.tags}"
-#     }
-# }
+    vars = {
+        dir_name = "${aws_instance.ec2[count.index].id}"
+    }
+}
 
 resource "aws_instance" "ec2" {
     ami = "ami-0abc4c35ba4c005ca"
@@ -25,8 +26,11 @@ resource "aws_instance" "ec2" {
         volume_type = "gp3"
         volume_size = "10"
     }
-    user_data = templatefile("shell_script.tpl", {
-        dir_name = "${var.prefix}-Test-${count.index}"
-    })
+    # templatefile function 사용
+    # user_data = templatefile("shell_script.tpl", {
+    #     dir_name = "${var.prefix}-Test-${count.index}"
+    # })
+
+    user_data = data.template_file.user_data.rendered
 }
 
