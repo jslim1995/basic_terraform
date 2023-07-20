@@ -22,7 +22,7 @@ resource "aws_subnet" "sb" {
     availability_zone = var.subnet_az_list[count.index].availability_zone
     cidr_block = var.subnet_az_list[count.index].cidr_block
 
-    map_public_ip_on_launch = true
+    map_public_ip_on_launch = true  // 퍼블릭 IP 주소 자동 할당
 
     tags = {
         Name = "${var.prefix}-subnet-public1-${var.subnet_az_list[count.index].availability_zone}"

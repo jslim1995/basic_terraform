@@ -1,5 +1,5 @@
 variable "ec2-count" {
-    default = 1
+    default = 3
     description = "value"
 }
 
