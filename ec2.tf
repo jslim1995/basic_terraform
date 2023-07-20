@@ -8,7 +8,7 @@ data "template_file" "user_data" {
     template = "${file("shell_script.tpl")}"
 
     vars = {
-        dir_name = "${aws_instance.ec2[count.index].id}"
+        dir_name = "1234"
     }
 }
 
