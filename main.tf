@@ -16,7 +16,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "sb" {
     vpc_id = aws_vpc.main.id
-    for_each = var.subnet_az_list
+    for_each = toset(var.subnet_az_list)
 
     tags = {
         Name = "${var.prefix}-subnet-public1-${availability_zone}"
