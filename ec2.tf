@@ -26,7 +26,7 @@ resource "aws_instance" "ec2" {
         volume_size = "10"
     }
     user_data = templatefile("shell_script.tpl", {
-        dir_name = "${aws_instance.ec2[count.index].tags}"
+        dir_name = "${var.prefix}-Test-${count.index}"
     })
 }
 
