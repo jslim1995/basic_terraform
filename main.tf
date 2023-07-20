@@ -14,23 +14,12 @@ resource "aws_vpc" "main" {
   
 }
 
-resource "aws_subnet" "ca-central-1a" {
+resource "aws_subnet" "sb" {
     vpc_id = aws_vpc.main.id
-    cidr_block = "172.164.1.0/24"
-    availability_zone = var.subnet_az_list
+    for_each = var.subnet_az_list
 
     tags = {
         Name = "${var.prefix}-subnet-public1-${availability_zone}"
-    }
-}
-
-resource "aws_subnet" "ca-central-1b" {
-    vpc_id = aws_vpc.main.id
-    cidr_block = "172.164.2.0/24"
-    availability_zone = "ca-central-1b"
-
-    tags = {
-        Name = "${var.prefix}-subnet-public2-${availability_zone}"
     }
 }
 
