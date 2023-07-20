@@ -7,3 +7,7 @@ output "ec2_ip" {
     value = aws_instance.ec2.*.private_ip
     description = "PrivateIP address details"
 }
+
+output "subnet_list" {
+    value = aws_subnet.sb.*.id
+}

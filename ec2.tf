@@ -9,8 +9,8 @@ resource "aws_instance" "ec2" {
     ami = "ami-0abc4c35ba4c005ca"
     instance_type = "t2.micro"
     count = var.ec2-count
-    subnet_id = "subnet-0e3124a38d1724f4c"
-    security_groups = [ "sg-03af6a452c389eb45" ]
+    subnet_id = aws_subnet.sb[length(var.subnet_az_list)%(tonumber(count.index)+1)].id
+    security_groups = [ "${aws_security_group.all.id}" ]
     key_name = "jinsu"
     tags = {
         Name = "${var.prefix}-Test-${count.index}"
