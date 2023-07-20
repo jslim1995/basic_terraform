@@ -22,7 +22,7 @@ resource "aws_instance" "ec2" {
     user_data = <<EOF
 #!/bin/bash
 sudo echo "test" | tee test.txt
-sudo mkdir /home/ubuntu/test123/\${var.prefix}
+sudo mkdir /home/ubuntu/test123/${var.prefix}
 EOF
 }
 
