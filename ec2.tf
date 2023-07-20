@@ -1,15 +1,9 @@
-variable "prefix" {
-    default = "jinsu"
-    description = "servername prefix"
-}
 variable "ec2-count" {
     default = 2
     description = "value"
 }
 
-provider "aws" {
-    region = "ca-central-1"
-}
+
 
 resource "aws_instance" "ec2" {
     ami = "ami-0abc4c35ba4c005ca"
@@ -19,7 +13,7 @@ resource "aws_instance" "ec2" {
     security_groups = [ "sg-03af6a452c389eb45" ]
     key_name = "jinsu"
     tags = {
-        Name = "${var.prefix}-Terraform-Test-${count.index}"
+        Name = "${var.prefix}-Test-${count.index}"
     }
     root_block_device {
         volume_type = "gp3"
@@ -32,7 +26,3 @@ sudo mkdir /home/ubuntu/test123/\${var.prefix}
 EOF
 }
 
-output "ec2_ip" {
-    value = aws_instance.ec2.*.private_ip
-    description = "PrivateIP address details"
-}
