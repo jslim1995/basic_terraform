@@ -25,6 +25,6 @@ resource "aws_instance" "ec2" {
         volume_type = "gp3"
         volume_size = "10"
     }
-    user_data = "${template_file.user_data.rendered}"
+    user_data = "${data.template_file.user_data.rendered}"
 }
 
