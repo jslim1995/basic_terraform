@@ -19,7 +19,7 @@ resource "aws_instance" "ec2" {
         volume_type = "gp3"
         volume_size = "10"
     }
-    user_data = <<-EOF
+    user_data = <<EOF
                 #!/bin/bash
                 sudo echo "test" | tee test.txt
                 sudo mkdir /home/ubuntu/test123
