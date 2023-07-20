@@ -6,7 +6,7 @@ variable "ec2-count" {
 resource "template_file" "user_data" {
     template = "${file("shell_script.tpl")}"
 
-    vars = {
+    vars {
         dir_name = "${aws_instance.ec2.tags}"
     }
 }
