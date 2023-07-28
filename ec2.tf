@@ -62,7 +62,7 @@ resource "aws_instance" "ec2" {
 #       "sudo apt -y update",
 #       "sudo apt -y install apache2",
 #       "sudo systemctl start apache2",
-#       "sudo chown -R ubuntu:ubuntu /var/www/html",
+#       "sudo chown -R ec2-user:ec2-user /var/www/html",
 #       "chmod +x *.sh",
 #       "PLACEHOLDER=${var.placeholder} WIDTH=${var.width} HEIGHT=${var.height} PREFIX=${var.prefix} ./deploy_app.sh",
 #       "sudo apt -y install cowsay",
@@ -71,7 +71,7 @@ resource "aws_instance" "ec2" {
 
 #     connection {
 #       type        = "ssh"
-#       user        = "ubuntu"
+#       user        = "ec2-user"
 #       private_key = tls_private_key.hashicat.private_key_pem
 #       host        = aws_eip.hashicat.public_ip
 #     }
@@ -81,6 +81,8 @@ resource "aws_instance" "ec2" {
 # # tls_private_key https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key.html
 # resource "tls_private_key" "hashicat" {
 #   algorithm = "ED25519"
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
 # }
 
 # locals {
