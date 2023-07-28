@@ -3,7 +3,7 @@ terraform {
         organization = "basic-test"
 
         workspaces {
-            name = "basic_terraform"
+            name = "cli_test"
         }
     }
 }
