@@ -56,8 +56,10 @@ ConnectionJob() {
     flag="n"
     while [[ $flag != "y" ]]; do
         # DB Engine Config name Typing
-        echo -e "\nPlease enter the connection name"
-        read -p "Enter the connection name(ex: mysql-test): " connection_name
+        while [[ $connection_name == "" ]]; do
+            echo -e "\nPlease enter the connection name"
+            read -p "Enter the connection name(ex: mysql-test): " connection_name
+        done
         
         # connection name validation check
         connection=($(vault read -ns=$namespace -format=json database/config/$connection_name 2> /dev/null | jq -r '.data'))
@@ -78,18 +80,35 @@ ConnectionJob() {
     # connection url
     echo -e "\nPlease enter the DB connection url"
     echo "SAMPLE--"
-    echo -e "MySQL     \t>> {{username}}:{{password}}@tcp(127.0.0.1:3306)/"
-    echo -e "PostgreSQL\t>> postgresql://{{username}}:{{password}}@localhost:5432/postgres"
-    echo -e "ORACLE    \t>> {{username}}/{{password}}@localhost:1521/orcl"
-    read -p "Enter the DB connection url: " connection_url
+    if [[ "$plugin_name" == *"mysql"* ]]; then
+        echo -e "MySQL     \t>> {{username}}:{{password}}@tcp(127.0.0.1:3306)/"
+        read -p "Enter the DB connection url: {{username}}:{{password}}@" connection_url
+        connection_url="{{username}}:{{password}}@$connection_url"
+    elif [[ "$plugin_name" == *"postgresql"* ]]; then
+        echo -e "PostgreSQL\t>> postgresql://{{username}}:{{password}}@localhost:5432/postgres"
+        read -p "Enter the DB connection url: postgresql://{{username}}:{{password}}@" connection_url
+        connection_url="postgresql://{{username}}:{{password}}@$connection_url"
+    elif [[ "$plugin_name" == *"oracle"* ]]; then
+        echo -e "ORACLE    \t>> {{username}}/{{password}}@localhost:1521/orcl"
+        read -p "Enter the DB connection url: {{username}}/{{password}}@" connection_url
+        connection_url="{{username}}/{{password}}@$connection_url"
+    else
+        echo -e "The '$plugin_name' is not supported by the db_engine_script."
+        read -p "Enter the DB connection url: " connection_url
+    fi
+
 
     # username
-    echo -e "\nPlease enter the DB username"
-    read -p "Enter the DB username: " username
+    while [[ $username == "" ]]; do
+        echo -e "\nPlease enter the DB username"
+        read -p "Enter the DB username: " username
+    done
     
     # password
-    echo -e "\nPlease enter the DB password"
-    read -s -p "Enter the DB password: " password
+    while [[ $password == "" ]]; do
+        echo -e "\nPlease enter the DB password"
+        read -s -p "Enter the DB password: " password
+    done
 
     # allowed_roles
     echo -e "\n\nPlease enter the allowed roles. (ex: * or mysql-dynamic, mysql-static, ...)"
@@ -115,7 +134,9 @@ ConnectionJob() {
 
 SelectPlugin() {
     plugin_count=1
-    plugin_list=($(vault read -ns=$namespace -format=json sys/plugins/catalog | jq -r '.data.database[]'))
+
+    # pulgin search
+    plugin_list=($(vault read -ns=$namespace -format=json sys/plugins/catalog | jq -r '.data.database[]' | grep 'mysql\|postgresql\|oracle'))
     echo -e "\nPlease select a plugin"
     for item in "${plugin_list[@]}"
     do
@@ -123,6 +144,7 @@ SelectPlugin() {
         ((plugin_count++))
     done
     read -p "Enter a number: " plugin_num
+
     # validation
     if [[ "$plugin_num" -ge 1 && "$plugin_num" -le "$plugin_count" ]]; then
         ((plugin_num--))
@@ -175,6 +197,7 @@ CreateConnection() {
         echo "Failed to create connection. Saving the error message to a file($error_log_file)."
     else
         echo -e "\nInformation on the created connection."
+        echo -e "Namespace : $namespace\nPath : database/config/$connection_name"
         vault read -ns=$namespace database/config/$connection_name
     fi
 
@@ -194,33 +217,37 @@ RoleJob() {
     else
         # connection choice
         connection_name=""
+        plugin_name=""
         SelectConnection
         if [[ "$connection_name" != "" ]]; then
             # Specify the Role Name
             SpecifyRoleName
+            flag="n"
+            while [[ $flag != "y" ]]; do
+                # role type choice
+                echo -e "\nPlease select the type of Role you will be creating"
+                echo "1. dynamic role"
+                echo "2. static role"
+                echo "0. exit"
+                read -p "Enter a number: " type_num
 
-            # role type choice
-            echo -e "\nPlease select the type of Role you will be creating"
-            echo "1. dynamic role"
-            echo "2. static role"
-            echo "0. exit"
-            read -p "Enter a number: " type_num
-
-            if [[ "$type_num" == "1" ]]; then
-
-                DynamicRoleJob
-
-            elif [[ "$type_num" == "2" ]]; then
-
-                StaticRoleJob
-
-            elif [[ "$type_num" == "0" ]]; then
-                echo "Cancel the 'select role type' operation."
-                init
-            else
-                echo "'$type_num' is not allowed."
-                SelectRoleType
-            fi
+                if [[ "$type_num" == "1" ]]; then
+                    flag="y"
+                    DynamicRoleJob
+                elif [[ "$type_num" == "2" ]]; then
+                    flag="y"
+                    StaticRoleJob
+                elif [[ "$type_num" == "0" ]]; then
+                    flag="y" 
+                    echo "Cancel the 'select role type' operation."
+                    init
+                else
+                    echo "'$type_num' is not allowed."
+                fi
+            done
+        else
+            echo "The connection_name value is missing."
+            RoleJob
         fi
     fi
 }
@@ -235,11 +262,13 @@ SelectConnection() {
         ((connection_count++))
     done
     read -p "Enter a number: " connection_num
+
     # validation
     if [[ "$connection_num" -ge 1 && "$connection_num" -le "$connection_count" ]]; then
         ((connection_num--))
         connection_name=${connection_list[$connection_num]}
         echo "selected connection : $connection_name"
+        plugin_name=`vault read -ns=$namespace -format=json database/config/$connection_name | jq -r '.data.plugin_name'`
     else
         echo "'$connection_num' is not in the range of 1 to $connection_count."
         SelectConnection
@@ -281,13 +310,39 @@ SpecifyRoleName() {
 # dynamic role job
 DynamicRoleJob() {
     echo "selected type : dynamic role"
+
+    if [[ "$plugin_name" == *"mysql"* ]]; then
+        while [[ "$user_ip" == "" ]]; do
+            echo -e "\nPlease enter the allowed host name (IP) for the account to be created. (ex: 192.168.0.%)"
+            read -p "Enter the IP: " user_ip
+        done
+    fi
+
     # creation_statements
     echo -e "\nPlease enter the creation_statements"
     echo "SAMPLE--"
-    echo -e "MySQL     \t>> CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}'; GRANT SELECT ON *.* TO '{{name}}'@'%';"
-    echo -e "PostgreSQL\t>> CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";"
-    echo -e "ORACLE    \t>> CREATE USER {{username}} IDENTIFIED BY \"{{password}}\"; GRANT CONNECT TO {{username}}; GRANT CREATE SESSION TO {{username}};"
-    read -p "Enter the creation_statements: " creation_statements
+    if [[ "$plugin_name" == *"mysql"* ]]; then
+        echo -e "MySQL     \t>> CREATE USER '{{name}}'@'$user_ip' IDENTIFIED BY '{{password}}'; GRANT SELECT ON *.* TO '{{name}}'@'$user_ip';"
+        read -p "Enter the creation_statements: CREATE USER '{{name}}'@'$user_ip' IDENTIFIED BY '{{password}}'; " creation_statements
+        creation_statements="CREATE USER '{{name}}'@'$user_ip' IDENTIFIED BY '{{password}}'; $creation_statements"
+    elif [[ "$plugin_name" == *"postgresql"* ]]; then
+        echo -e "PostgreSQL\t>> CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";"
+        read -p "Enter the creation_statements: CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; " creation_statements
+        creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; $creation_statements"
+
+    elif [[ "$plugin_name" == *"oracle"* ]]; then
+        echo -e "ORACLE    \t>> CREATE USER {{username}} IDENTIFIED BY \"{{password}}\"; GRANT CONNECT TO {{username}}; GRANT CREATE SESSION TO {{username}};"
+        read -p "Enter the creation_statements: CREATE USER {{username}} IDENTIFIED BY \"{{password}}\"; " creation_statements
+        creation_statements="CREATE USER {{username}} IDENTIFIED BY \"{{password}}\"; $creation_statements"
+    else
+        echo "The $plugin_name associated with the $connection_name is not supported by the db_engine_script."
+        read -p "Enter the creation_statements: " creation_statements
+    fi
+
+    # creation_statements check
+    if [[ "$creation_statements" == "" ]]; then
+        DynamicRoleJob
+    fi
 
     # default_ttl
     echo -e "\nPlease enter the default_ttl"
@@ -324,7 +379,8 @@ CreateDynamicRole() {
         cat $error_log_file
         echo "Failed to create dynamic role. Saving the error message to a file($error_log_file)."
     else
-        echo "Information on the created dynamic role."
+        echo -e "\nInformation on the created dynamic role."
+        echo -e "Namespace : $namespace\nPath : database/roles/$role_name"
         vault read -ns=$namespace database/roles/$role_name
     fi
     rm creation_statements.sql
@@ -334,19 +390,55 @@ CreateDynamicRole() {
 
 StaticRoleJob() {
     echo "selected type : static role"
-    # rotation_statements
-    echo -e "\nPlease enter the rotation_statements"
-    echo "SAMPLE--"
-    echo -e "MySQL     \t>> ALTER USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';"
-    echo -e "PostgreSQL\t>> ALTER USER \"{{name}}\" WITH PASSWORD '{{password}}';"
-    echo -e "ORACLE    \t>> ALTER USER {{username}} IDENTIFIED BY \"{{password}}\";"
-    read -p "Enter the rotation_statements: " rotation_statements
+
+    if [[ "$plugin_name" == *"mysql"* ]]; then
+        while [[ "$user_ip" == "" ]]; do
+            echo -e "\nPlease enter the allowed host name (IP) for the account to be created. (ex: 192.168.0.%)"
+            read -p "Enter the IP: " user_ip
+        done
+    fi
+
+    # default rotation_statements
+    flag="y"
+    echo -e "\nDefault value for rotation_statements :"
+    if [[ "$plugin_name" == *"mysql"* ]]; then
+        echo -e "MySQL     \t>> ALTER USER '{{name}}'@'$user_ip' IDENTIFIED BY '{{password}}';"
+        rotation_statements="ALTER USER '{{name}}'@'$user_ip' IDENTIFIED BY '{{password}}';"
+    elif [[ "$plugin_name" == *"postgresql"* ]]; then
+        echo -e "PostgreSQL\t>> ALTER USER \"{{name}}\" WITH PASSWORD '{{password}}';"
+        rotation_statements="ALTER USER \"{{name}}\" WITH PASSWORD '{{password}}';"
+    elif [[ "$plugin_name" == *"oracle"* ]]; then
+        echo -e "ORACLE    \t>> ALTER USER {{username}} IDENTIFIED BY \"{{password}}\";"
+        rotation_statements="ALTER USER {{username}} IDENTIFIED BY \"{{password}}\";"
+    else
+        echo "The $plugin_name associated with the $connection_name is not supported by the db_engine_script."
+        flag="n"
+    fi
+
+    # default use check
+    if [[ "$flag" == "y" ]]; then
+        read -p "Do you want to use the default value for the rotation_statements? (y/n): " flag
+        flag=${flag,,}
+    fi
+
+    # custom rotation_statements
+    if [[ "$flag" != "y" ]]; then
+        read -p "Enter the rotation_statements: " rotation_statements
+    fi
+    
+    # rotation_statements check
+    if [[ "$rotation_statements" == "" ]]; then
+        StaticRoleJob
+    fi
+
 
     # user_name
     if [[ $1 == ""  ]]; then
         # create
-        echo -e "\nPlease enter the DB username that password will be rotated"
-        read -p "Enter the DB username: " username
+        while [[ $username == "" ]]; do 
+            echo -e "\nPlease enter the DB username that password will be rotated"
+            read -p "Enter the DB username: " username
+        done
     else
         # update
         echo -e "\nThe Database username($1) set in the role cannot be modified."
@@ -355,8 +447,10 @@ StaticRoleJob() {
     fi
     
     # rotation_period
-    echo -e "\nPlease enter the rotation period"
-    read -p "Enter the rotation_period(The minimum is 5s): " rotation_period
+    while [[ $rotation_period == "" ]]; do
+        echo -e "\nPlease enter the rotation period"
+        read -p "Enter the rotation_period(The minimum is 5s): " rotation_period
+    done
 
     echo -e "\nWould you like to create the Static Role with this information?"
     echo -e "connection name\t\t: $connection_name"
@@ -385,7 +479,8 @@ CreateStaticRole() {
         cat $error_log_file
         echo "Failed to create static role. Saving the error message to a file($error_log_file)."
     else
-        echo "Information on the created static role."
+        echo -e "\nInformation on the created static role."
+        echo -e "Namespace : $namespace\nPath : database/static-roles/$role_name"
         vault read -ns=$namespace database/static-roles/$role_name
     fi
     rm rotation_statements.sql
