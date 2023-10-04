@@ -86,7 +86,6 @@ resource "aws_security_group" "all" {
 // https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
 resource "aws_network_acl" "main" {
     vpc_id = aws_vpc.main.id
-    subnet_ids = aws_subnet.sb.id
 
     # Vault reporting ip start
     egress {
@@ -148,6 +147,12 @@ resource "aws_network_acl" "main" {
         Name = "${var.prefix}-acl"
     }
 }
+
+resource "aws_network_acl_association" "main" {
+    network_acl_id = aws_network_acl.main.id
+    subnet_id      = aws_subnet.sb.id
+}
+
 
 
 
