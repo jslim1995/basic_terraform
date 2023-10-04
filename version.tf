@@ -1,9 +1,9 @@
-terraform {
-    cloud {
-        organization = "basic-test"
+# terraform {
+#     cloud {
+#         organization = "basic-test"
 
-        workspaces {
-            name = "basic_terraform"
-        }
-    }
-}
+#         workspaces {
+#             name = "basic_terraform"
+#         }
+#     }
+# }
