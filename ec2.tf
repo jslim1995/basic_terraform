@@ -12,15 +12,12 @@ variable "vault_auto_join" {
     default = "vault_auto_join"
     description = "vault_auto_join"
 }
-variable "license" {
-    default = var.VAULT_LICENSE
-}
 
 data "template_file" "user_data" {
     template = "${file("user_data.tpl")}"
 
     vars = {
-        vault_license = var.license
+        vault_license = var.VAULT_LICENSE
     }
 }
 
