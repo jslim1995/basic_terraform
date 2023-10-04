@@ -3,16 +3,26 @@ variable "ec2-count" {
     description = "value"
 }
 
+variable "ami_amz2_x86" {
+    default = "ami-049db1506b2371272"
+    description = "ami_amz2_x86"
+}
+
+variable "vault_auto_join" {
+    default = "vault_auto_join"
+    description = "vault_auto_join"
+}
+
 data "template_file" "user_data" {
-    template = "${file("shell_script.tpl")}"
+    template = "${file("user_data.tpl")}"
 
     vars = {
-        dir_name = "1234"
+        vault_license = "${var.VAULT_LICENSE}"
     }
 }
 
-resource "aws_instance" "ec2" {
-    ami = "ami-0abc4c35ba4c005ca"
+resource "aws_instance" "vault_raft_amz2_x86" {
+    ami = var.ami_amz2_x86
     instance_type = "t2.micro"
     count = var.ec2-count
     subnet_id = aws_subnet.sb[(tonumber(count.index)+1)%length(var.subnet_az_list)].id
@@ -20,6 +30,7 @@ resource "aws_instance" "ec2" {
     key_name = "jinsu"
     tags = {
         Name = "${var.prefix}-Test-${count.index}"
+        service = "${var.vault_auto_join}"
     }
     root_block_device {
         volume_type = "gp3"

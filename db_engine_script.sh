@@ -10,6 +10,14 @@ init() {
     echo -e "################ Vault Database Engine Script ################"
     echo -e "##############################################################"
 
+    # init
+    connection_name=""
+    plugin_name=""
+    role_name=""
+    username=""
+    password=""
+    rotation_period=""
+    flag=""
     SelectNamespace
 }
 
@@ -74,7 +82,6 @@ ConnectionJob() {
     done
 
     # Plugin Type Select
-    plugin_name=""
     SelectPlugin
 
     # connection url
@@ -261,7 +268,11 @@ SelectConnection() {
         echo "$connection_count. $item"
         ((connection_count++))
     done
-    read -p "Enter a number: " connection_num
+    
+    connection_num=""
+    while [[ $connection_num == "" ]]; do
+        read -p "Enter a number: " connection_num
+    done
 
     # validation
     if [[ "$connection_num" -ge 1 && "$connection_num" -le "$connection_count" ]]; then
