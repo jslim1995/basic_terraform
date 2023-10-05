@@ -1,7 +1,7 @@
 # 참고 : https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
 ## EKS
 resource "aws_iam_role" "eks_cluster_role" {
-    name = "${module.main.prefix}_eks_cluster_role"
+    name = "${var.prefix}_eks_cluster_role"
     assume_role_policy = jsonencode({
         Version = "2012-10-17",
         Statement = [
@@ -18,7 +18,7 @@ resource "aws_iam_role" "eks_cluster_role" {
 }
 
 resource "aws_iam_role" "eks_worker_node_role" {
-    name = "${module.main.prefix}_eks_worker_node_role"
+    name = "${var.prefix}_eks_worker_node_role"
     assume_role_policy = jsonencode({
         Version = "2012-10-17",
         Statement = [
