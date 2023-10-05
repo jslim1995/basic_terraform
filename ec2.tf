@@ -44,6 +44,9 @@ resource "aws_instance" "vault_raft_amz2_x86" {
         volume_type = "gp3"
         volume_size = "10"
     }
+    credit_specification {
+        cpu_credits = "standard"
+    }
     
     iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
     # templatefile function 사용
