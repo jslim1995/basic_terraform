@@ -1,12 +1,11 @@
 # 참고 : https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy
 data "aws_iam_policy_document" "instance_assume_role_policy" {
     statement {
-        Effect = "Allow"
         principals {
             type        = "Service"
             identifiers = ["ec2.amazonaws.com"]
         }
-        Action = ["sts:AssumeRole"]
+        actions = ["sts:AssumeRole"]
     }
 }
 
