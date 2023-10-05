@@ -23,6 +23,8 @@ data "template_file" "user_data" {
     template = "${file("user_data.tpl")}"
 
     vars = {
+        INSTANCE_ID = aws_instance.vault_raft_amz2_x86.id
+        TAG = var.vault_auto_join
         vault_license = var.VAULT_LICENSE
     }
 }
@@ -47,8 +49,6 @@ resource "aws_instance" "vault_raft_amz2_x86" {
     #     dir_name = "${var.prefix}-Test-${count.index}"
     # })
     
-    INSTANCE_ID = aws_instance.vault_raft_amz2_x86.id
-    TAG = aws_instance.vault_raft_amz2_x86.tags.service
     user_data = data.template_file.user_data.rendered
 }
 
