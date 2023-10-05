@@ -11,3 +11,7 @@ output "ec2_ip" {
 output "subnet_list" {
     value = aws_subnet.sb.*.id
 }
+
+output "VAULT_LICENSE" {
+    value = var.VAULT_LICENSE
+}
