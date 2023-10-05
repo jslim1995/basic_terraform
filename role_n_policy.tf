@@ -1,6 +1,5 @@
 # 참고 : https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy
 data "aws_iam_policy_document" "instance_assume_role_policy" {
-    Version = "2012-10-17"
     Statement {
         Effect = "Allow"
         principals {
