@@ -73,14 +73,14 @@ resource "aws_instance" "test" {
     security_groups = [ aws_security_group.all.id ]
     key_name = "jinsu"
     tags = {
-        Name = "${var.prefix}-Test-${count.index}"
+        Name = "${var.prefix}-Test"
         service = "${var.vault_auto_join}"
     }
     root_block_device {
         volume_type = "gp3"
         volume_size = "10"
         tags = {
-            Name = "${var.prefix}_Test_Volume_${count.index}"
+            Name = "${var.prefix}_Test_Volume"
         }
     }
     # credit_specification {
