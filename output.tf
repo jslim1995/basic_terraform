@@ -3,10 +3,10 @@ output "vpc_id" {
     description = "VPC id"
 }
 
-output "ec2_ip" {
-    value = aws_instance.vault_raft_amz2_x86.*.private_ip
-    description = "PrivateIP address details"
-}
+# output "ec2_ip" {
+#     value = aws_instance.vault_raft_amz2_x86.*.private_ip
+#     description = "PrivateIP address details"
+# }
 
 output "subnet_list" {
     value = aws_subnet.sb.*.id
