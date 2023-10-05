@@ -21,3 +21,7 @@ variable "subnet_az_list" {
 variable "subnet_ids" {
     description = "subnet ids"
 }
+
+variable "security_group_id" {
+    description = "aws security group id"
+}
