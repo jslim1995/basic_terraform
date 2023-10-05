@@ -4,7 +4,7 @@ output "vpc_id" {
 }
 
 output "ec2_ip" {
-    value = aws_instance.ec2.*.private_ip
+    value = aws_instance.vault_raft_amz2_x86.*.private_ip
     description = "PrivateIP address details"
 }
 

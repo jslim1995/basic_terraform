@@ -84,12 +84,12 @@ resource "aws_security_group" "all" {
 }
 
 // https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
-resource "aws_network_acl" "main" {
+resource "aws_network_acl" "acl" {
     vpc_id = aws_vpc.main.id
 
     # Vault reporting ip start
     egress {
-        protocol   = "https"
+        protocol   = "tcp"
         rule_no    = 80
         action     = "deny"
         cidr_block = "100.20.70.12/32"
@@ -98,7 +98,7 @@ resource "aws_network_acl" "main" {
     }
 
     egress {
-        protocol   = "https"
+        protocol   = "tcp"
         rule_no    = 81
         action     = "deny"
         cidr_block = "35.166.5.222/32"
@@ -107,7 +107,7 @@ resource "aws_network_acl" "main" {
     }
 
     egress {
-        protocol   = "https"
+        protocol   = "tcp"
         rule_no    = 82
         action     = "deny"
         cidr_block = "23.95.85.111/32"
@@ -116,7 +116,7 @@ resource "aws_network_acl" "main" {
     }
 
     egress {
-        protocol   = "https"
+        protocol   = "tcp"
         rule_no    = 83
         action     = "deny"
         cidr_block = "44.215.244.1/32"
@@ -150,7 +150,7 @@ resource "aws_network_acl" "main" {
 
 resource "aws_network_acl_association" "main" {
     count = length(aws_subnet.sb)
-    network_acl_id = aws_network_acl.main.id
+    network_acl_id = aws_network_acl.acl.id
     subnet_id      = aws_subnet.sb.id
 }
 
