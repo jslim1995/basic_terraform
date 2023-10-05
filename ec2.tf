@@ -43,6 +43,9 @@ resource "aws_instance" "vault_raft_amz2_x86" {
     root_block_device {
         volume_type = "gp3"
         volume_size = "10"
+        tags = {
+            Name = "${var.prefix}_Test_Volume_${count.index}"
+        }
     }
     credit_specification {
         cpu_credits = "standard"
