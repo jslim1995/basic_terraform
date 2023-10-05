@@ -81,7 +81,18 @@ resource "aws_iam_role" "eks_cluster_role" {
 
 resource "aws_iam_role" "eks_worker_node_role" {
     name = "${var.prefix}_eks_worker_node_role"
-    assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
+    assume_role_policy = jsonencode({
+        Version = "2012-10-17",
+        Statement = [
+            {
+                Action = "sts:AssumeRole",
+                Principal = {
+                    Service = "ec2.amazonaws.com"
+                },
+                Effect = "Allow",
+            },
+        ]
+    })
     managed_policy_arns = [
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly", 
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy", 
