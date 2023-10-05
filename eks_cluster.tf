@@ -7,7 +7,7 @@ resource "aws_eks_cluster" "eks_cluster" {
     endpoint_private_access = true
     endpoint_public_access = true
     security_group_ids = [ "${aws_security_group.all.id}" ]
-    subnet_ids = [ "${aws_subnet.sb.*.id}" ] 
+    subnet_ids = aws_subnet.sb.*.id
   }
 }
 
