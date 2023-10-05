@@ -74,7 +74,7 @@ resource "aws_instance" "test" {
     instance_type = "t2.micro"
     # availability_zone = var.subnet_az_list[0].availability_zone
     # subnet_id = aws_subnet.sb[0].id
-    # security_groups = [ aws_security_group.all.id ]
+    security_groups = [ aws_security_group.all.id ]
     key_name = "jinsu"
     tags = {
         Name = "${var.prefix}-Test"
