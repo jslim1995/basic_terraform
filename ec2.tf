@@ -13,11 +13,17 @@ variable "vault_auto_join" {
     description = "vault_auto_join"
 }
 
+variable "VAULT_LICENSE" {
+  description = "License for the Vault"
+  type        = string
+  # default    = "YOUR_DEFAULT_VALUE" # 필요한 경우 기본값 설정
+}
+
 data "template_file" "user_data" {
     template = "${file("user_data.tpl")}"
 
     vars = {
-        vault_license = var.AWS_ACCESS_KEY_ID
+        vault_license = var.VAULT_LICENSE
     }
 }
 
