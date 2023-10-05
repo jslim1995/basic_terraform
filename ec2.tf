@@ -17,7 +17,7 @@ data "template_file" "user_data" {
     template = "${file("user_data.tpl")}"
 
     vars = {
-        vault_license = var.VAULT_LICENSE
+        vault_license = var.AWS_ACCESS_KEY_ID
     }
 }
 
