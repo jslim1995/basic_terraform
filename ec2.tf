@@ -66,7 +66,28 @@ resource "aws_instance" "vault_raft_amz2_x86" {
         ignore_changes = [ user_data ]
     }
 }
+resource "aws_instance" "test" {
+    ami = var.ami_amz2_x86
+    instance_type = "t2.micro"
+    subnet_id = aws_subnet.sb[0].id
+    security_groups = [ aws_security_group.all.id ]
+    key_name = "jinsu"
+    tags = {
+        Name = "${var.prefix}-Test-${count.index}"
+        service = "${var.vault_auto_join}"
+    }
+    root_block_device {
+        volume_type = "gp3"
+        volume_size = "10"
+        tags = {
+            Name = "${var.prefix}_Test_Volume_${count.index}"
+        }
+    }
+    # credit_specification {
+    #     cpu_credits = "standard"
+    # }
 
+}
 
 # test 할 것
 # null_resource : https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource
