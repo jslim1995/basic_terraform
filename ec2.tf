@@ -23,7 +23,7 @@ data "template_file" "user_data" {
     template = "${file("user_data.tpl")}"
 
     vars = {
-        INSTANCE_ID = aws_instance.vault_raft_amz2_x86.id
+        INSTANCE_ID = aws_instance.vault_raft_amz2_x86.private_ip
         TAG = var.vault_auto_join
         vault_license = var.VAULT_LICENSE
     }
