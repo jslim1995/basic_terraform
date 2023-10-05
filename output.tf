@@ -8,11 +8,16 @@ output "vpc_id" {
 #     description = "PrivateIP address details"
 # }
 
-output "subnet_list" {
+output "subnet_ids" {
     value = aws_subnet.sb.*.id
 }
 
 output "VAULT_LICENSE" {
     value = var.VAULT_LICENSE
     sensitive   = true
+}
+
+output "prefix" {
+    value = var.prefix
+    description = "servername prefix"
 }
