@@ -55,6 +55,10 @@ resource "aws_instance" "vault_raft_amz2_x86" {
     # })
     
     user_data = data.template_file.user_data.rendered
+    
+    lifecycle {
+        ignore_changes = [ user_data ]
+    }
 }
 
 
