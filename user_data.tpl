@@ -1,5 +1,12 @@
 #!/bin/bash
 ## https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
+# export REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | sed 's/.*: "\(.*\)".*/\1/')
+# export INSTANCE_ID=$(ec2-metadata --instance-id | cut -d " " -f 2)
+# export TAG=$(aws ec2 describe-instances \
+# --region $REGION \
+# --instance-ids $INSTANCE_ID \
+# --query "Reservations[].Instances[].Tags[?Key=='service'].Value[]" | grep \" | awk -F\" '{print $2}')
+
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install vault-enterprise-1.13.2+ent-1.x86_64
@@ -20,7 +27,7 @@ api_addr      = "http://{{ GetInterfaceIP \"eth0\" }}:8200"
 #}
 
 storage "raft" {
-  node_id = "node-${INSTANCE_ID}"
+  node_id = "node-$(ec2-metadata --instance-id | cut -d " " -f 2)"
   path = "/opt/vault/data"
   retry_join {
     auto_join = "provider=aws tag_key=service tag_value=${TAG}"
