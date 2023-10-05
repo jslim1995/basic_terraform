@@ -45,7 +45,7 @@ resource "aws_instance" "vault_raft_amz2_x86" {
         volume_size = "10"
     }
     
-    iam_instance_profile = aws_iam_role.vault_join_role.name
+    iam_instance_profile = aws_iam_role.vault_join_role.arn
     # templatefile function 사용
     # user_data = templatefile("user_data.tpl", {
     #     # dir_name = "${var.prefix}-Test-${count.index}"
