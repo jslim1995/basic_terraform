@@ -14,9 +14,6 @@ variable "subnet_az_list" {
     }, {
         availability_zone = "ca-central-1b"
         cidr_block = "172.164.2.0/24"
-    }, {
-        availability_zone = "ca-central-1d"
-        cidr_block = "172.164.4.0/24"
     } ]
     description = "az list"
 }
