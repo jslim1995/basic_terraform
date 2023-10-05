@@ -1,5 +1,5 @@
 variable "prefix" {
-    default = "jinsu-terraform"
+    default = "jinsu_terraform"
     description = "servername prefix"
 }
 
