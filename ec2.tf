@@ -34,7 +34,7 @@ resource "aws_instance" "vault_raft_amz2_x86" {
     instance_type = "t2.micro"
     count = var.ec2-count
     subnet_id = aws_subnet.sb[(tonumber(count.index)+1)%length(var.subnet_az_list)].id
-    security_groups = [ "${aws_security_group.all.id}" ]
+    security_groups = [ aws_security_group.all.id ]
     key_name = "jinsu"
     tags = {
         Name = "${var.prefix}-Test-${count.index}"

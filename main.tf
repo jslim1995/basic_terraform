@@ -79,7 +79,7 @@ resource "aws_security_group" "all" {
     }
   
     tags = {
-        Name = "${var.prefix}-sg"
+        Name = "${var.prefix}_sg_All_allowed"
     }
 }
 
