@@ -46,7 +46,9 @@ resource "aws_instance" "vault_raft_amz2_x86" {
     # user_data = templatefile("shell_script.tpl", {
     #     dir_name = "${var.prefix}-Test-${count.index}"
     # })
-
+    
+    INSTANCE_ID = aws_instance.vault_raft_amz2_x86.id
+    TAG = aws_instance.vault_raft_amz2_x86.tags.service
     user_data = data.template_file.user_data.rendered
 }
 
