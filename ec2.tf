@@ -45,11 +45,14 @@ resource "aws_instance" "vault_raft_amz2_x86" {
         volume_size = "10"
     }
     # templatefile function 사용
-    # user_data = templatefile("shell_script.tpl", {
-    #     dir_name = "${var.prefix}-Test-${count.index}"
-    # })
+    user_data = templatefile("user_data.tpl", {
+        # dir_name = "${var.prefix}-Test-${count.index}"
+        INSTANCE_ID = aws_instance.vault_raft_amz2_x86.private_ip
+        TAG = var.vault_auto_join
+        vault_license = var.VAULT_LICENSE
+    })
     
-    user_data = data.template_file.user_data.rendered
+    # user_data = data.template_file.user_data.rendered
 }
 
 
