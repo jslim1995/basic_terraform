@@ -14,4 +14,5 @@ output "subnet_list" {
 
 output "VAULT_LICENSE" {
     value = var.VAULT_LICENSE
+    sensitive   = true
 }
