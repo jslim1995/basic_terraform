@@ -76,17 +76,13 @@ resource "aws_instance" "test" {
         Name = "${var.prefix}-Test"
         service = "${var.vault_auto_join}"
     }
-    root_block_device {
-        volume_type = "gp3"
-        volume_size = "10"
-        tags = {
-            Name = "${var.prefix}_Test_Volume"
-        }
-    }
-    # credit_specification {
-    #     cpu_credits = "standard"
+    # root_block_device {
+    #     volume_type = "gp3"
+    #     volume_size = "10"
+    #     tags = {
+    #         Name = "${var.prefix}_Test_Volume"
+    #     }
     # }
-
 }
 
 # test 할 것
