@@ -1,7 +1,7 @@
 module "main" {
     source = "./EKS"
 
-    count = 0
+    count = 1
 
     prefix = var.prefix
     security_group_ids = [ "${aws_security_group.all.id}" ]
