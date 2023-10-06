@@ -12,7 +12,7 @@ resource "aws_eks_cluster" "eks_cluster" {
     }
 
     # Option
-    version = "1.21"
+    version = "1.23"
 }
 
 output "endpoint" {
