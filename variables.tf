@@ -35,7 +35,40 @@ variable "subnet_az_list" {
       cidr_block        = "172.164.13.0/24"
     },
   ]
-  description = "az list"
+  description = "Subnet AZ 설정 값 목록"
+}
+
+variable "ec2-count" {
+  default     = 3
+  description = "EC2 갯수 설정"
+}
+
+variable "ami_amz2" {
+  default     = "ami-043a1babe609d076d"
+  # default     = "ami-049db1506b2371272"
+  description = "ami_amz2_arm"
+}
+
+# variable "ami_amz2" {
+#   default     = "ami-049db1506b2371272"
+#   description = "ami_amz2_x86"
+# }
+
+variable "vault_auto_join" {
+  default     = "vault_auto_join"
+  description = "vault_auto_join을 위한 태그 명"
+}
+
+variable "vault_instance_type" {
+  default = "t4g.micro"
+  # default = "t2.micro"
+  description = "vault instance type"  
+}
+
+variable "VAULT_LICENSE" {
+  type        = string
+  description = "License for the Vault"
+  # default    = "YOUR_DEFAULT_VALUE" # 필요한 경우 기본값 설정
 }
 
 variable "pem_key_name" {
