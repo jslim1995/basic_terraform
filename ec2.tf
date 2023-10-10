@@ -4,7 +4,7 @@ variable "ec2-count" {
 }
 
 variable "ami_amz2" {
-  default     = "ami-05b2c6a7ac3dbfc40"
+  default     = "ami-043a1babe609d076d"
   # default     = "ami-049db1506b2371272"
   description = "ami_amz2_arm"
 }
@@ -16,7 +16,7 @@ variable "ami_amz2" {
 
 variable "vault_auto_join" {
   default     = "vault_auto_join"
-  description = "vault_auto_join"
+  description = "vault_auto_join을 위한 태그 명"
 }
 
 variable "vault_instance_type" {
@@ -26,8 +26,8 @@ variable "vault_instance_type" {
 }
 
 variable "VAULT_LICENSE" {
-  description = "License for the Vault"
   type        = string
+  description = "License for the Vault"
   # default    = "YOUR_DEFAULT_VALUE" # 필요한 경우 기본값 설정
 }
 
@@ -47,7 +47,7 @@ resource "aws_instance" "vault_raft_amz2" {
   count                  = var.ec2-count
   subnet_id              = aws_subnet.sb[(tonumber(count.index) + 1) % length(var.subnet_az_list)].id
   vpc_security_group_ids = [aws_security_group.all.id]
-  key_name               = "jinsu"
+  key_name               = var.pem_key_name
   tags = {
     Name    = "${var.prefix}-Test-${count.index}"
     service = "${var.vault_auto_join}"

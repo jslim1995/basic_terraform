@@ -2,6 +2,10 @@ variable "prefix" {
   default     = "jinsu_terraform"
   description = "servername prefix"
 }
+variable "aws_region" {
+  default = "ap-northeast-2"
+  description = "aws_region"
+}
 
 variable "subnet_az_list" {
   type = list(object({
@@ -9,6 +13,7 @@ variable "subnet_az_list" {
     cidr_block        = string
   }))
   default = [
+    # ca-central-1 AZ
     # {
     #   availability_zone = "ca-central-1a"
     #   cidr_block        = "172.164.1.0/24"
