@@ -13,8 +13,8 @@ resource "aws_instance" "vault_raft_amz2" {
   instance_type          = var.vault_instance_type
   count                  = var.ec2-count
   subnet_id              = aws_subnet.sb[(tonumber(count.index) + 1) % length(var.subnet_az_list)].id
-  vpc_security_group_ids = [aws_security_group.all.id]
-  associate_public_ip_address = true
+  # vpc_security_group_ids = [aws_security_group.all.id]
+  security_groups = [aws_security_group.all.id]
   key_name               = var.pem_key_name
   tags = {
     Name    = "${var.prefix}-Test-${count.index}"

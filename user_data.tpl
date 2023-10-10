@@ -55,10 +55,10 @@ license_path = "/etc/vault.d/vault.hclic"
 #disable_performance_standby = false
 
 # Example AWS KMS auto unseal
-seal "awskms" {
-  region = "ca-central-1"
-  kms_key_id = "mrk-316b5f6f66ae4b898c8db08abb53eef9"
-}
+# seal "awskms" {
+#   region = "ca-central-1"
+#   kms_key_id = "mrk-316b5f6f66ae4b898c8db08abb53eef9"
+# }
 
 # reporting disable
 reporting {

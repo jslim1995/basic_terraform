@@ -55,7 +55,7 @@ variable "ami_amz2" {
 # }
 
 variable "vault_auto_join" {
-  default     = "vault_auto_join"
+  default     = "vault_auto_join_1010"
   description = "vault_auto_join을 위한 태그 명"
 }
 
