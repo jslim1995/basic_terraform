@@ -9,7 +9,8 @@
 
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-sudo yum -y install vault-enterprise-1.13.2+ent-1.x86_64
+# sudo yum -y install vault-enterprise-1.13.2+ent-1.x86_64
+sudo yum -y install vault-enterprise-1.14.4+ent-1.aarch64
 
 
 sudo tee /etc/vault.d/vault.hcl -<<EOF
