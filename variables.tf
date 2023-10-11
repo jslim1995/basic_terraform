@@ -3,7 +3,7 @@ variable "prefix" {
   description = "servername prefix"
 }
 variable "aws_region" {
-  default = "ap-northeast-2"
+  default     = "ap-northeast-2"
   description = "aws_region"
 }
 
@@ -44,7 +44,7 @@ variable "ec2-count" {
 }
 
 variable "ami_amz2" {
-  default     = "ami-043a1babe609d076d"
+  default = "ami-043a1babe609d076d"
   # default     = "ami-049db1506b2371272"
   description = "ami_amz2_arm"
 }
@@ -62,7 +62,7 @@ variable "vault_auto_join" {
 variable "vault_instance_type" {
   default = "t4g.micro"
   # default = "t2.micro"
-  description = "vault instance type"  
+  description = "vault instance type"
 }
 
 variable "VAULT_LICENSE" {
@@ -72,8 +72,34 @@ variable "VAULT_LICENSE" {
 }
 
 variable "pem_key_name" {
-  type        = string
+  type = string
   # default     = "jinsu"
   default     = "vbac_pem"
   description = "ec2에 사용되는 pem key 명"
+}
+
+variable "architecture" {
+  type = string
+  # default     = "arm"
+  default     = "x86"
+  description = "ec2에 사용되는 아키텍쳐 명"
+}
+
+variable "instance_type_x86" {
+  default     = "t2.micro"
+  description = "x86 instance type"
+}
+
+variable "instance_type_arm" {
+  default     = "t4g.micro"
+  description = "arm instance type"
+}
+
+variable "ami_amz2_x86" {
+  default     = "ami-049db1506b2371272"
+  description = "ami_amz2_x86"
+}
+variable "ami_amz2_arm" {
+  default = "ami-043a1babe609d076d"
+  description = "ami_amz2_arm"
 }
