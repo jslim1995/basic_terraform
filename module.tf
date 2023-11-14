@@ -27,8 +27,8 @@ module "vault_raft" {
   pem_key_name         = var.pem_key_name
 }
 
-module "vault" {
-  source = "./vault"
+# module "vault" {
+#   source = "./vault"
 
-  count = 0
-}
+#   count = 0
+# }
