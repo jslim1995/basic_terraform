@@ -29,7 +29,7 @@ resource "vault_kv_secret_v2" "example" {
   data_json = jsonencode(
     {
       zip = "zap",
-      foo = "bar"
+      foo = "bar2"
     }
   )
 }
