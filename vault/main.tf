@@ -1,7 +1,7 @@
 provider "vault" {
 #   address    = "http://jinsu.inside-vault.com:80"
   address    = "http://3.96.222.156:8200"
-  token      = "hvs.CAESIBDiNwQkE9npx-bz5v1aYDMKi7LfxNAuAjbRMG3Tu4GzGigKImh2cy5KU3ZPRFNXR1NLVUdsVXU5TVJIYmRsNFcuUWJMckMQyKAB"
+  token      = "hvs.CAESICdREjsQL3w3ueiAEA4wvUYT3wE07jnvpWxbsUyF70nOGigKImh2cy5nSm9YVjluM3R3YmJKY3pLS2FGNkFkaUQuUWJMckMQ36AB"
   token_name = "terraform"
   auth_login {
     path      = "auth/token/login"
