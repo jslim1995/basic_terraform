@@ -8,6 +8,7 @@ data "template_file" "consul_user_data" {
   }
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "consul_amz2" {
   ami           = var.ami
   instance_type = var.instance_type
@@ -18,7 +19,7 @@ resource "aws_instance" "consul_amz2" {
   key_name        = var.pem_key_name
   tags = {
     Name    = "${var.prefix}-Test-${count.index}"
-    service = "${var.consul_tag_name}"
+    auto_join = "${var.consul_tag_name}"
   }
   root_block_device {
     volume_type = "gp3"
@@ -69,7 +70,7 @@ resource "aws_instance" "vault_amz2" {
   key_name        = var.pem_key_name
   tags = {
     Name    = "${var.prefix}-Test-${count.index}"
-    service = "${var.vault_tag_name}"
+    auto_join = "${var.vault_tag_name}"
   }
   root_block_device {
     volume_type = "gp3"

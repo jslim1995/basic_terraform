@@ -30,3 +30,9 @@ variable "security_group_ids" {
   type        = list(string)
   description = "aws security group id"
 }
+
+variable "pem_key_name" {
+  type        = string
+  default     = "jinsu"
+  description = "ec2에 사용되는 pem key 명"
+}

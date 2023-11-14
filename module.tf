@@ -1,11 +1,12 @@
 module "eks" {
   source = "./EKS"
 
-  count = 1
+  count = 0
 
   prefix             = var.prefix
   security_group_ids = ["${aws_security_group.all.id}"]
   subnet_ids         = aws_subnet.sb.*.id
+  pem_key_name       = var.pem_key_name
 }
 
 module "vault_raft" {
@@ -24,4 +25,8 @@ module "vault_raft" {
   prefix               = var.prefix
   VAULT_LICENSE        = var.VAULT_LICENSE
   pem_key_name         = var.pem_key_name
+}
+
+module "vault" {
+  source = "./vault"
 }

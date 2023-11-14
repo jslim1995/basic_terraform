@@ -85,6 +85,7 @@ resource "aws_security_group" "all" {
 }
 
 // https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
+# hashicorp license report deny
 resource "aws_network_acl" "acl" {
   vpc_id = aws_vpc.main.id
 

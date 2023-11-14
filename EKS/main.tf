@@ -40,10 +40,10 @@ resource "aws_eks_node_group" "eks_node" {
   node_group_name = "${var.prefix}_eks_node"
   instance_types  = ["t3.small"]
 
-  # remote_access {
-  #     ec2_ssh_key = "jinsu"
-  #     source_security_group_ids = var.security_group_ids
-  # }
+  remote_access {
+    ec2_ssh_key               = var.pem_key_name
+    source_security_group_ids = var.security_group_ids
+  }
 
   update_config {
     max_unavailable = 1

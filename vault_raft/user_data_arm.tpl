@@ -31,7 +31,7 @@ storage "raft" {
   node_id = "node-$(ec2-metadata --instance-id | cut -d " " -f 2)"
   path = "/opt/vault/data"
   retry_join {
-    auto_join = "provider=aws tag_key=service tag_value=${TAG}"
+    auto_join = "provider=aws tag_key=auto_join tag_value=${TAG}"
     auto_join_scheme = "http"
   }
 }
