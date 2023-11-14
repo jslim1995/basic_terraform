@@ -22,7 +22,7 @@ provider "vault" {
 
 resource "vault_kv_secret_v2" "example" {
 #   namespace = "tf"
-  mount     = vault_mount.kvv2.path
+  mount     = "secret"
   name      = "value"
   #   cas                 = 1
   #   delete_all_versions = true
