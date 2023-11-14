@@ -19,5 +19,5 @@ data "vault_kv_secret_v2" "prefix" {
   namespace = "tf"
   mount     = "secret"
   name      = "value"
-  version   = "2"
+#   version   = "2"
 }
