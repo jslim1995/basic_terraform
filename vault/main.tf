@@ -13,13 +13,13 @@ provider "vault" {
 
 # kv write
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/kv_secret_v2
-# resource "vault_mount" "kvv2" {
-# #   namespace   = "tf"
-#   path        = "secret"
-#   type        = "kv"
-#   options     = { version = "2" }
-#   description = "KV Version 2 secret engine mount"
-# }
+resource "vault_mount" "kvv2" {
+#   namespace   = "tf"
+  path        = "client_count_test"
+  type        = "kv"
+  options     = { version = "2" }
+  description = "KV Version 2 secret engine mount"
+}
 
 # resource "vault_kv_secret_v2" "example" {
 # #   namespace = "tf"
