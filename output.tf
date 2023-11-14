@@ -23,6 +23,7 @@ output "prefix" {
 }
 
 output "prefix_vault" {
+  sensitive = true
   value = module.vault.prefix_vault
   description = "prefix_vault"
 }
