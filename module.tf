@@ -29,6 +29,4 @@ module "vault_raft" {
 
 module "vault" {
   source = "./vault"
-
-  count = 0
 }
