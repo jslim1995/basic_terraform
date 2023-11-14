@@ -21,9 +21,3 @@ output "prefix" {
   value       = var.prefix
   description = "servername prefix"
 }
-
-output "prefix_vault" {
-  sensitive = false
-  value = module.vault.prefix_vault
-  description = "prefix_vault"
-}
