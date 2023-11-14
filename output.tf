@@ -24,6 +24,6 @@ output "prefix" {
 
 output "prefix_vault" {
   sensitive = false
-  value = data.vault_kv_secret_v2.prefix
+  value = module.vault.prefix_vault
   description = "prefix_vault"
 }
