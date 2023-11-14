@@ -36,9 +36,9 @@ resource "vault_kv_secret_v2" "example" {
 
 # kv read
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2
-data "vault_kv_secret_v2" "prefix" {
-  namespace = "tf"
-  mount     = "secret"
-  name      = "value"
-  #   version   = "2"
-}
+# data "vault_kv_secret_v2" "prefix" {
+#   namespace = "tf"
+#   mount     = "secret"
+#   name      = "value"
+#   #   version   = "2"
+# }
