@@ -186,19 +186,19 @@ provider "vault" {
 #   description = "KV Version 2 secret engine mount"
 # }
 
-resource "vault_kv_secret_v2" "example" {
-#   namespace = "tf"
-  mount     = "secret"
-  name      = "value"
-  #   cas                 = 1
-  #   delete_all_versions = true
-  data_json = jsonencode(
-    {
-      zip = "zap2",
-      foo = "bar2"
-    }
-  )
-}
+# resource "vault_kv_secret_v2" "example" {
+# #   namespace = "tf"
+#   mount     = "secret"
+#   name      = "value"
+#   #   cas                 = 1
+#   #   delete_all_versions = true
+#   data_json = jsonencode(
+#     {
+#       zip = "zap2",
+#       foo = "bar2"
+#     }
+#   )
+# }
 
 # kv read
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2
