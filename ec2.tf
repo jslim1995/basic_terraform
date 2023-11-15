@@ -90,6 +90,7 @@
 # #     }
 # #   }
 
+# # # https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec
 # #   provisioner "remote-exec" {
 # #     inline = [
 # #       "sudo apt -y update",
@@ -113,18 +114,65 @@
 # #   }
 # # }
 
-# # # tls_private_key https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key.html
-# # resource "tls_private_key" "hashicat" {
-# #   algorithm = "ED25519"
-# #   algorithm = "RSA"
-# #   rsa_bits  = 4096
-# # }
+# tls_private_key https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key.html
+resource "tls_private_key" "hashicat" {
+#   algorithm = "ED25519"
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 
-# # locals {
-# #   private_key_filename = "${var.prefix}-ssh-key.pem"
-# # }
+locals {
+  private_key_filename = "${var.prefix}-ssh-key.pem"
+}
 
-# # resource "aws_key_pair" "hashicat" {
-# #   key_name   = local.private_key_filename
-# #   public_key = tls_private_key.hashicat.public_key_openssh
-# # }
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
+resource "aws_key_pair" "hashicat" {
+  key_name   = local.private_key_filename
+  public_key = tls_private_key.hashicat.public_key_openssh
+}
+
+data "tls_public_key" "pemfile" {
+  private_key_pem = tls_private_key.hashicat.private_key_pem
+}
+
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+resource "aws_instance" "vault_raft_amz2" {
+  ami           = local.ami
+  instance_type = local.instance_type
+  count         = var.ec2-count
+  subnet_id     = aws_subnet.sb.*.id[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
+  # vpc_security_group_ids = [aws_security_group.all.id]
+  security_groups = ["${aws_security_group.all.id}"]
+  key_name        = aws_key_pair.hashicat.key_name
+  tags = {
+    Name    = "${var.prefix}-remote-exec-test-${count.index}"
+  }
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = "10"
+    tags = {
+      Name = "${var.prefix}_Test_Volume_${count.index}"
+    }
+  }
+  credit_specification {
+    cpu_credits = "standard"
+  }
+
+  iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
+
+  # templatefile function 사용
+  # user_data = templatefile("user_data.tpl", {
+  #     # dir_name = "${var.prefix}-Test-${count.index}"
+  #     INSTANCE_ID = var.INSTANCE_ID2
+  #     TAG = var.vault_auto_join
+  #     vault_license = var.VAULT_LICENSE
+  # })
+
+  # user data
+  # user_data = data.template_file.user_data.rendered
+
+  # lifecycle {
+  #     ignore_changes = [ user_data ]
+  # }
+}

@@ -21,3 +21,7 @@ output "prefix" {
   value       = var.prefix
   description = "servername prefix"
 }
+
+output "pemfile" {
+  value = data.tls_public_key.pemfile.private_key_pem
+}
