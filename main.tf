@@ -11,7 +11,7 @@ resource "aws_vpc" "main" {
 
   tags = {
     Name = "${var.prefix}-test"
-    test = "${module.vault.prefix_vault}-test"
+    # test = "${module.vault.prefix_vault}-test"
   }
 
 }
