@@ -27,7 +27,7 @@ data "aws_ami" "amazon_linux" {
 resource "aws_instance" "vault_raft_amz2" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
-  count         = var.ec2_count
+  count         = 1
   subnet_id     = var.subnet_ids[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
   # vpc_security_group_ids = [aws_security_group.all.id]
   security_groups = var.security_group_ids
