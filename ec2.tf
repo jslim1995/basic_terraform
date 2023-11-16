@@ -137,7 +137,7 @@ data "tls_public_key" "pemfile" {
 
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
-resource "aws_instance" "vault_raft_amz2" {
+resource "aws_instance" "pem_key_check_instance" {
   ami           = local.ami
   instance_type = local.instance_type
   count         = var.ec2-count
