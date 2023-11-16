@@ -154,7 +154,7 @@ data "aws_ami" "amazon_linux" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "pem_key_check_instance" {
-  ami           = data.aws_ami.amazon_linux
+  ami           = data.aws_ami.amazon_linux.id
   instance_type = local.instance_type
 #   count         = 1
 #   subnet_id     = aws_subnet.sb.*.id[0]
