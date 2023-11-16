@@ -12,7 +12,7 @@ module "eks" {
 module "vault_raft" {
   source = "./vault_raft"
 
-  count = 1
+  count = 0
 
   tag_name             = "vault_auto_join"
   subnet_ids           = aws_subnet.sb.*.id
