@@ -1,5 +1,5 @@
 data "template_file" "user_data" {
-  template = file(var.architecture == "x86" ? "./vault_raft/user_data_x86.tpl" : "./user_data_arm.tpl")
+  template = file(var.architecture == "x86" ? "${path.module}/user_data_x86.tpl" : "${path.module}/user_data_arm.tpl")
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
@@ -8,8 +8,24 @@ data "template_file" "user_data" {
   }
 }
 
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  owners = ["amazon"]
+}
+
 resource "aws_instance" "vault_raft_amz2" {
-  ami           = var.ami
+  ami           = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
   count         = var.ec2_count
   subnet_id     = var.subnet_ids[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
