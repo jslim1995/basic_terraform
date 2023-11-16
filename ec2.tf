@@ -1,3 +1,8 @@
+provider "aws" {
+  # region = "ca-central-1"
+  region = var.aws_region
+}
+
 # data "template_file" "user_data" {
 #   template = file("user_data.tpl")
 
