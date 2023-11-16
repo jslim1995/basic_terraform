@@ -1,8 +1,3 @@
-provider "aws" {
-  # region = "ca-central-1"
-  region = var.aws_region
-}
-
 # data "template_file" "user_data" {
 #   template = file("user_data.tpl")
 
@@ -160,11 +155,11 @@ resource "aws_instance" "pem_key_check_instance" {
       Name = "${var.prefix}_Test_Volume_${count.index}"
     }
   }
-  credit_specification {
-    cpu_credits = "standard"
-  }
+#   credit_specification {
+#     cpu_credits = "standard"
+#   }
 
-  iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
+#   iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
 
   # templatefile function 사용
   # user_data = templatefile("user_data.tpl", {
