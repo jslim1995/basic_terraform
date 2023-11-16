@@ -170,6 +170,25 @@ resource "aws_instance" "pem_key_check_instance" {
       Name = "${var.prefix}_Test_Volume"
     }
   }
+
+  # https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec
+  provisioner "remote-exec" {
+    inline = [ 
+      "mkdir $HOME/test"
+    ]
+    # connection {
+# #       type        = "ssh"
+# #       user        = "ec2-user"
+# #       private_key = tls_private_key.hashicat.private_key_pem
+# #       host        = aws_eip.hashicat.public_ip
+# #     }
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      private_key = data.tls_public_key.pemfile.private_key_pem
+      host = self.public_ip
+    }
+  }
 #   credit_specification {
 #     cpu_credits = "standard"
 #   }
