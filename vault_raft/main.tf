@@ -33,7 +33,7 @@ resource "aws_instance" "vault_raft_amz2" {
   security_groups = var.security_group_ids
   key_name        = var.pem_key_name
   tags = {
-    Name    = "${var.prefix}-Test-${count.index}"
+    Name      = "${var.prefix}-Test-${count.index}"
     auto_join = "${var.tag_name}"
   }
   root_block_device {
