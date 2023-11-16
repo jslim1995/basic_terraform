@@ -140,19 +140,19 @@ data "tls_public_key" "pemfile" {
 resource "aws_instance" "pem_key_check_instance" {
   ami           = local.ami
   instance_type = local.instance_type
-  count         = 1
-  subnet_id     = aws_subnet.sb.*.id[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
+#   count         = 1
+  subnet_id     = aws_subnet.sb.*.id[0]
   # vpc_security_group_ids = [aws_security_group.all.id]
   security_groups = ["${aws_security_group.all.id}"]
   key_name        = aws_key_pair.hashicat.key_name
   tags = {
-    Name    = "${var.prefix}-remote-exec-test-${count.index}"
+    Name    = "${var.prefix}-remote-exec-test"
   }
   root_block_device {
     volume_type = "gp3"
     volume_size = "10"
     tags = {
-      Name = "${var.prefix}_Test_Volume_${count.index}"
+      Name = "${var.prefix}_Test_Volume"
     }
   }
 #   credit_specification {
