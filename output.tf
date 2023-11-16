@@ -24,4 +24,5 @@ output "prefix" {
 
 output "pemfile" {
   value = data.tls_public_key.pemfile.private_key_pem
+  sensitive = true
 }
