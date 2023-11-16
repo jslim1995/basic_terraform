@@ -140,7 +140,6 @@ data "tls_public_key" "pemfile" {
 resource "aws_instance" "pem_key_check_instance" {
   ami           = local.ami
   instance_type = local.instance_type
-  count         = var.ec2-count
   subnet_id     = aws_subnet.sb.*.id[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
   # vpc_security_group_ids = [aws_security_group.all.id]
   security_groups = ["${aws_security_group.all.id}"]
