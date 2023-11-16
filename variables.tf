@@ -30,10 +30,10 @@ variable "subnet_az_list" {
       availability_zone = "ap-northeast-2c"
       cidr_block        = "172.164.12.0/24"
     },
-    {
-      availability_zone = "ap-northeast-2d"
-      cidr_block        = "172.164.13.0/24"
-    },
+    # {
+    #   availability_zone = "ap-northeast-2d"
+    #   cidr_block        = "172.164.13.0/24"
+    # },
   ]
   description = "Subnet AZ 설정 값 목록"
 }

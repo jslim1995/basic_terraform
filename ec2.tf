@@ -161,13 +161,13 @@ resource "aws_instance" "pem_key_check_instance" {
   vpc_security_group_ids = [aws_security_group.all.id]
   key_name        = aws_key_pair.hashicat.key_name
   tags = {
-    Name    = "${var.prefix}-remote-exec-test"
+    Name    = "${var.prefix}-remote-exec-test-${count.index}"
   }
   root_block_device {
     volume_type = "gp3"
     volume_size = "10"
     tags = {
-      Name = "${var.prefix}_Test_Volume"
+      Name = "${var.prefix}_Test_Volume_${count.index}"
     }
   }
 
