@@ -1,5 +1,5 @@
 data "template_file" "user_data" {
-  template = file(var.architecture == "x86" ? "./user_data_x86.tpl" : "./user_data_arm.tpl")
+  template = file(var.architecture == "x86" ? "./vault_raft/user_data_x86.tpl" : "./user_data_arm.tpl")
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
