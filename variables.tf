@@ -27,11 +27,11 @@ variable "subnet_az_list" {
       cidr_block        = "172.164.11.0/24"
     },
     {
-      availability_zone = "ap-northeast-2b"
+      availability_zone = "ap-northeast-2c"
       cidr_block        = "172.164.12.0/24"
     },
     {
-      availability_zone = "ap-northeast-2c"
+      availability_zone = "ap-northeast-2d"
       cidr_block        = "172.164.13.0/24"
     },
   ]
