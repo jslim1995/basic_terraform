@@ -33,7 +33,8 @@ resource "aws_instance" "consul_amz2" {
   subnet_id     = var.subnet_ids[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
   # vpc_security_group_ids = [aws_security_group.all.id]
   security_groups = var.security_group_ids
-  key_name        = var.pem_key_name
+  # key_name        = var.pem_key_name
+  key_name        = "jinsu"
   tags = {
     Name      = "${var.prefix}-Test-${count.index}"
     auto_join = "${var.consul_tag_name}"
