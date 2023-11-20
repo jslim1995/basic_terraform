@@ -115,8 +115,8 @@
 # # }
 
 # tls_private_key https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key.html
-resource "tls_private_key" "hashicat" {
-#   algorithm = "ED25519"
+resource "tls_private_key" "ssh_test" {
+  #   algorithm = "ED25519"
   algorithm = "RSA"
   rsa_bits  = 4096
 }
@@ -126,13 +126,13 @@ locals {
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
-resource "aws_key_pair" "hashicat" {
+resource "aws_key_pair" "ssh_test_pem_key" {
   key_name   = local.private_key_filename
-  public_key = tls_private_key.hashicat.public_key_openssh
+  public_key = tls_private_key.ssh_test.public_key_openssh
 }
 
 data "tls_public_key" "pemfile" {
-  private_key_pem = tls_private_key.hashicat.private_key_pem
+  private_key_pem = tls_private_key.ssh_test.private_key_pem
 }
 
 
@@ -154,14 +154,14 @@ data "aws_ami" "amazon_linux" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "pem_key_check_instance" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = local.instance_type
-  count         = var.ec2-count
-  subnet_id     = aws_subnet.sb.*.id[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = local.instance_type
+  count                  = var.ec2-count
+  subnet_id              = aws_subnet.sb.*.id[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
   vpc_security_group_ids = [aws_security_group.all.id]
-  key_name        = aws_key_pair.hashicat.key_name
+  key_name               = aws_key_pair.ssh_test_pem_key.key_name
   tags = {
-    Name    = "${var.prefix}-remote-exec-test-${count.index}"
+    Name = "${var.prefix}-remote-exec-test-${count.index}"
   }
   root_block_device {
     volume_type = "gp3"
@@ -173,27 +173,21 @@ resource "aws_instance" "pem_key_check_instance" {
 
   # https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec
   provisioner "remote-exec" {
-    inline = [ 
+    inline = [
       "mkdir $HOME/test"
     ]
-    # connection {
-# #       type        = "ssh"
-# #       user        = "ec2-user"
-# #       private_key = tls_private_key.hashicat.private_key_pem
-# #       host        = aws_eip.hashicat.public_ip
-# #     }
     connection {
-      type = "ssh"
-      user = "ec2-user"
+      type        = "ssh"
+      user        = "ec2-user"
       private_key = data.tls_public_key.pemfile.private_key_pem
-      host = self.public_ip
+      host        = self.public_ip
     }
   }
-#   credit_specification {
-#     cpu_credits = "standard"
-#   }
+  #   credit_specification {
+  #     cpu_credits = "standard"
+  #   }
 
-#   iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
+  #   iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
 
   # templatefile function 사용
   # user_data = templatefile("user_data.tpl", {
@@ -209,4 +203,63 @@ resource "aws_instance" "pem_key_check_instance" {
   # lifecycle {
   #     ignore_changes = [ user_data ]
   # }
+}
+
+### test
+# tls_private_key 생성
+# https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key.html
+resource "tls_private_key" "remote_exec_test" {
+  #   algorithm = "ED25519"
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# aws_key_pair 생성
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
+resource "aws_key_pair" "remote_exec_test_pem_key" {
+  key_name   = "pem_key"
+  public_key = tls_private_key.remote_exec_test.public_key_openssh
+}
+
+# # aws_ami data
+# data "aws_ami" "amazon_linux" {
+#   most_recent = true
+
+#   filter {
+#     name   = "architecture"
+#     values = ["x86_64"]
+#   }
+
+#   filter {
+#     name   = "name"
+#     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+#   }
+
+#   owners = ["amazon"]
+# }
+
+# aws_instance 생성
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+resource "aws_instance" "remote_exec_test_instance" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t2.micro"
+  key_name               = aws_key_pair.remote_exec_test_pem_key.key_name
+
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = "10"
+  }
+
+  # https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir $HOME/test"
+    ]
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = tls_private_key.remote_exec_test.private_key_pem
+      host        = self.public_ip
+    }
+  }
 }
