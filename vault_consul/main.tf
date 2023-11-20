@@ -83,7 +83,7 @@ resource "aws_instance" "vault_amz2" {
   instance_type = var.instance_type
   count         = var.vault_ec2_count
   subnet_id     = var.subnet_ids[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
-  vpc_security_group_ids = [aws_security_group.all.id]
+  vpc_security_group_ids = [var.vpc_security_group_ids]
   # security_groups = var.security_group_ids
   key_name        = var.pem_key_name
   tags = {
