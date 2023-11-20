@@ -1,8 +1,8 @@
 #!/bin/bash
 sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-# sudo yum -y install consul-enterprise-1.15.3+ent-1.x86_64
-sudo yum -y install consul-enterprise-1.15.3+ent-1.aarch64
+sudo yum -y install consul-enterprise-1.15.3+ent-1.x86_64
+# sudo yum -y install consul-enterprise-1.15.3+ent-1.aarch64
 
 sudo tee /etc/consul.d/consul.hcl -<<EOF
 # Fullconfiguration options can be found at https://www.consul.io/docs/agent/options.html
@@ -38,7 +38,7 @@ encrypt = "moikosStCf56OR/Dvuy4mqY7ABKP2J76BBA8GF9qJF8="
 
 
 # retry_join
-retry_join = ["provider=aws tag_key=auto_join tag_value=${tag}"]
+retry_join = ["provider=aws tag_key=auto_join tag_value=${TAG}"]
 
 performance {
   raft_multiplier = 1

@@ -20,7 +20,7 @@ data "template_file" "consul_user_data" {
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
-    tag            = var.consul_tag_name
+    TAG            = var.consul_tag_name
     consul_license = var.CONSUL_LICENSE
   }
 }
@@ -35,7 +35,7 @@ resource "aws_instance" "consul_amz2" {
   security_groups = var.security_group_ids
   key_name        = var.pem_key_name
   tags = {
-    Name      = "${var.prefix}-Test-${count.index}"
+    Name      = "${var.prefix}-consul-${count.index}"
     auto_join = "${var.consul_tag_name}"
   }
   root_block_device {
@@ -87,7 +87,7 @@ resource "aws_instance" "vault_amz2" {
   security_groups = var.security_group_ids
   key_name        = var.pem_key_name
   tags = {
-    Name      = "${var.prefix}-Test-${count.index}"
+    Name      = "${var.prefix}-vault-${count.index}"
     auto_join = "${var.vault_tag_name}"
   }
   root_block_device {

@@ -38,7 +38,7 @@ encrypt = "moikosStCf56OR/Dvuy4mqY7ABKP2J76BBA8GF9qJF8="
 
 
 # retry_join
-retry_join = ["provider=aws tag_key=auto_join tag_value=${tag}"]
+retry_join = ["provider=aws tag_key=auto_join tag_value=${TAG}"]
 
 performance {
   raft_multiplier = 1
