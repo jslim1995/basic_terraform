@@ -57,13 +57,6 @@ variable "vault_ec2_count" {
   description = "EC2 갯수 설정"
 }
 
-
-variable "vault_tag_name" {
-  type        = string
-  default     = "vault_auto_join"
-  description = "vault_auto_join을 위한 태그 명"
-}
-
 variable "VAULT_LICENSE" {
   type        = string
   description = "License for the Vault"

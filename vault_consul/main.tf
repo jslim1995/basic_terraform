@@ -72,7 +72,7 @@ data "template_file" "vault_user_data" {
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
-    TAG            = var.vault_tag_name
+    TAG            = var.consul_tag_name
     vault_license  = var.VAULT_LICENSE
     consul_license = var.CONSUL_LICENSE
   }
@@ -88,7 +88,7 @@ resource "aws_instance" "vault_amz2" {
   key_name        = var.pem_key_name
   tags = {
     Name      = "${var.prefix}-vault-${count.index}"
-    auto_join = "${var.vault_tag_name}"
+    auto_join = "${var.consul_tag_name}"
   }
   root_block_device {
     volume_type = "gp3"
