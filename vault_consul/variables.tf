@@ -22,8 +22,8 @@ variable "CONSUL_LICENSE" {
 
 variable "pem_key_name" {
   type        = string
-  # default     = "jinsu"
-  default     = "vbac_pem"
+  default     = "jinsu"
+  # default     = "vbac_pem"
   description = "ec2에 사용되는 pem key 명"
 }
 
