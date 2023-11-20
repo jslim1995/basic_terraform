@@ -20,13 +20,6 @@ variable "CONSUL_LICENSE" {
   # default    = "YOUR_DEFAULT_VALUE" # 필요한 경우 기본값 설정
 }
 
-variable "pem_key_name" {
-  type        = string
-  default     = "jinsu"
-  # default     = "vbac_pem"
-  description = "ec2에 사용되는 pem key 명"
-}
-
 variable "subnet_az_list" {
   type = list(object({
     availability_zone = string

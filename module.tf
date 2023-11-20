@@ -40,7 +40,7 @@ module "vault_consul" {
   subnet_az_list       = var.subnet_az_list
   prefix               = var.prefix
   VAULT_LICENSE        = var.VAULT_LICENSE
-  pem_key_name         = var.pem_key_name
+  # pem_key_name         = var.pem_key_name
   CONSUL_LICENSE = var.CONSUL_LICENSE
   vault_iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
   consul_iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name

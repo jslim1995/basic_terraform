@@ -1,5 +1,5 @@
 data "template_file" "consul_user_data" {
-  template = file(var.architecture == "x86" ? "consul_user_data_x86.tpl" : "consul_user_data_arm.tpl")
+  template = file(var.architecture == "x86" ? "${path.module}/consul_user_data_x86.tpl" : "${path.module}/consul_user_data_arm.tpl")
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
@@ -51,12 +51,13 @@ resource "aws_instance" "consul_amz2" {
 
 
 data "template_file" "vault_user_data" {
-  template = file(var.architecture == "x86" ? "vault_user_data_x86.tpl" : "vault_user_data_arm.tpl")
+  template = file(var.architecture == "x86" ? "${path.module}/vault_user_data_x86.tpl" : "${path.module}/vault_user_data_arm.tpl")
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
     TAG           = var.vault_tag_name
     vault_license = var.VAULT_LICENSE
+    consul_license = var.CONSUL_LICENSE
   }
 }
 
