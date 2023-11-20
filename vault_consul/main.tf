@@ -1,16 +1,33 @@
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+
+  filter {
+    name   = "architecture"
+    values = ["${var.architecture}"]
+  }
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-${var.architecture}-gp2"]
+  }
+
+  owners = ["amazon"]
+}
+
 data "template_file" "consul_user_data" {
-  template = file(var.architecture == "x86" ? "${path.module}/consul_user_data_x86.tpl" : "${path.module}/consul_user_data_arm.tpl")
+  template = file(var.architecture == "x86_64" ? "${path.module}/consul_user_data_x86.tpl" : "${path.module}/consul_user_data_arm.tpl")
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
-    tag           = var.consul_tag_name
+    tag            = var.consul_tag_name
     consul_license = var.CONSUL_LICENSE
   }
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "consul_amz2" {
-  ami           = var.ami
+  ami           = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
   count         = var.consul_ec2_count
   subnet_id     = var.subnet_ids[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
@@ -18,7 +35,7 @@ resource "aws_instance" "consul_amz2" {
   security_groups = var.security_group_ids
   key_name        = var.pem_key_name
   tags = {
-    Name    = "${var.prefix}-Test-${count.index}"
+    Name      = "${var.prefix}-Test-${count.index}"
     auto_join = "${var.consul_tag_name}"
   }
   root_block_device {
@@ -51,18 +68,18 @@ resource "aws_instance" "consul_amz2" {
 
 
 data "template_file" "vault_user_data" {
-  template = file(var.architecture == "x86" ? "${path.module}/vault_user_data_x86.tpl" : "${path.module}/vault_user_data_arm.tpl")
+  template = file(var.architecture == "x86_64" ? "${path.module}/vault_user_data_x86.tpl" : "${path.module}/vault_user_data_arm.tpl")
 
   vars = {
     # INSTANCE_ID = aws_instance.vault_raft_amz2_x86[0].id
-    TAG           = var.vault_tag_name
-    vault_license = var.VAULT_LICENSE
+    TAG            = var.vault_tag_name
+    vault_license  = var.VAULT_LICENSE
     consul_license = var.CONSUL_LICENSE
   }
 }
 
 resource "aws_instance" "vault_amz2" {
-  ami           = var.ami
+  ami           = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
   count         = var.vault_ec2_count
   subnet_id     = var.subnet_ids[(tonumber(count.index) + 1) % length(var.subnet_az_list)]
@@ -70,7 +87,7 @@ resource "aws_instance" "vault_amz2" {
   security_groups = var.security_group_ids
   key_name        = var.pem_key_name
   tags = {
-    Name    = "${var.prefix}-Test-${count.index}"
+    Name      = "${var.prefix}-Test-${count.index}"
     auto_join = "${var.vault_tag_name}"
   }
   root_block_device {

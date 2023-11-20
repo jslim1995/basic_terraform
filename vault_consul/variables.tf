@@ -91,7 +91,7 @@ variable "ami" {
 variable "architecture" {
   type = string
   # default     = "arm"
-  default     = "x86"
+  default     = "x86_64"
   description = "ec2에 사용되는 아키텍쳐 명"
 }
 

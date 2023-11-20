@@ -135,7 +135,7 @@ data "tls_public_key" "pemfile" {
   private_key_pem = tls_private_key.ssh_test.private_key_pem
 }
 
-
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami
 data "aws_ami" "amazon_linux" {
   most_recent = true
 

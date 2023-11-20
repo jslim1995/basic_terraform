@@ -34,7 +34,7 @@ module "vault_consul" {
 
   subnet_ids           = aws_subnet.sb.*.id
   security_group_ids   = ["${aws_security_group.all.id}"]
-  architecture         = var.architecture
+  # architecture         = "x86_64"
   ami                  = local.ami
   instance_type        = local.instance_type
   subnet_az_list       = var.subnet_az_list

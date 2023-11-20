@@ -14,8 +14,9 @@ data "aws_iam_policy_document" "instance_assume_role_policy" {
 resource "aws_iam_instance_profile" "vault_join_profile" {
   name = "vault_join_profile"
   role = aws_iam_role.vault_join_role.name
-}
+} 
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
 resource "aws_iam_role" "vault_join_role" {
   name               = "${var.prefix}_vault_join_role"
   assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
