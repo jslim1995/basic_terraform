@@ -94,6 +94,10 @@ variable "subnet_ids" {
   description = "subnet ids"
 }
 
+variable "vpc_security_group_ids" {
+  description = "aws security group id"
+}
+
 variable "security_group_ids" {
   type        = list(string)
   description = "aws security group id"
