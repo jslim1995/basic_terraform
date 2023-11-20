@@ -241,9 +241,9 @@ resource "aws_key_pair" "remote_exec_test_pem_key" {
 # aws_instance 생성
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "remote_exec_test_instance" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.remote_exec_test_pem_key.key_name
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.remote_exec_test_pem_key.key_name
 
   root_block_device {
     volume_type = "gp3"
@@ -262,4 +262,9 @@ resource "aws_instance" "remote_exec_test_instance" {
       host        = self.public_ip
     }
   }
+}
+
+output "pem_key" {
+  value = tls_private_key.remote_exec_test.private_key_pem
+  sensitive = true
 }
