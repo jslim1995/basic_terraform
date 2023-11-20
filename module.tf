@@ -27,6 +27,26 @@ module "vault_raft" {
   pem_key_name         = var.pem_key_name
 }
 
+module "vault_consul" {
+  source = "./vault_consul"
+
+  count = 1
+
+  subnet_ids           = aws_subnet.sb.*.id
+  security_group_ids   = ["${aws_security_group.all.id}"]
+  architecture         = var.architecture
+  ami                  = local.ami
+  instance_type        = local.instance_type
+  subnet_az_list       = var.subnet_az_list
+  prefix               = var.prefix
+  VAULT_LICENSE        = var.VAULT_LICENSE
+  pem_key_name         = var.pem_key_name
+  CONSUL_LICENSE = var.CONSUL_LICENSE
+  vault_iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
+  consul_iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
+  
+}
+
 module "vault" {
   source = "./vault"
 }

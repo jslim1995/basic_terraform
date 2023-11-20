@@ -70,6 +70,10 @@ variable "VAULT_LICENSE" {
   description = "License for the Vault"
   # default    = "YOUR_DEFAULT_VALUE" # 필요한 경우 기본값 설정
 }
+variable "CONSUL_LICENSE" {
+  type = string
+  description = "CONSUL_LICENSE"
+}
 
 variable "pem_key_name" {
   type = string
