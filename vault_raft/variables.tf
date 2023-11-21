@@ -87,6 +87,10 @@ variable "security_group_ids" {
   description = "aws security group id"
 }
 
+variable "vpc_security_group_ids" {
+  description = "aws security group id"
+}
+
 variable "iam_instance_profile" {
   type        = string
   description = "iam_instance_profile"

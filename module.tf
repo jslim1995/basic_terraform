@@ -12,11 +12,12 @@ module "eks" {
 module "vault_raft" {
   source = "./vault_raft"
 
-  count = 0
+  count = 1
 
   tag_name             = "vault_auto_join"
   subnet_ids           = aws_subnet.sb.*.id
   iam_instance_profile = aws_iam_instance_profile.vault_join_profile.name
+  vpc_security_group_ids = aws_security_group.all.id
   security_group_ids   = ["${aws_security_group.all.id}"]
   architecture         = var.architecture
   ami                  = local.ami
@@ -30,7 +31,7 @@ module "vault_raft" {
 module "vault_consul" {
   source = "./vault_consul"
 
-  count = 1
+  count = 0
 
   subnet_ids             = aws_subnet.sb.*.id
   vpc_security_group_ids = aws_security_group.all.id
