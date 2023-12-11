@@ -3,7 +3,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-
 // VPC START
 resource "aws_vpc" "main" {
   cidr_block       = "172.164.0.0/16"
